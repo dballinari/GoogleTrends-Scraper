@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from functools import reduce
 
 
-def merge_two_trends(data_first, data_second):
+def concat_two_trends(data_first, data_second):
     """
     Function that merges two panda data frames obtained from GoogleTrends. Last observation of 'data_first' and first
     observation of 'data_second' have to be overlapping (same date).
@@ -36,7 +36,7 @@ def merge_two_trends(data_first, data_second):
     return data_first.combine_first(data_second)
 
 
-def merge_data(data_list, keywords):
+def concat_data(data_list, keywords):
     """
     Function that merge the DataFrames obtained from different scrapes of GoogleTrends. The DataFrames are collected in
     a list (ordered chronologically), with the last and first observation of two consecutive DataFrames being from the
@@ -49,7 +49,7 @@ def merge_data(data_list, keywords):
 
     """
     # Iteratively merge the DataFrame objects in the list of data
-    data = reduce((lambda x, y: merge_two_trends(x, y)), data_list)
+    data = reduce((lambda x, y: concat_two_trends(x, y)), data_list)
     # Find the maximal value across keywords and time
     max_value = data.max().max()
     # Rescale the trends by the maximal value, i.e. such that the largest value across keywords and time is 100
@@ -60,10 +60,42 @@ def merge_data(data_list, keywords):
 
 
 def merge_two_keyword_chunks(data_first, data_second):
+    """
+    Given two data frame objects with same index and one overlapping column (keyword), a scaling factor
+    is determined and the data frames are merged, where the second data frame is rescaled to match the
+    scale of the first data set.
+
+    Args:
+        data_first: pandas.DataFrame obtained from the csv-file created by GoogleTrends
+        data_second: pandas.DataFrame obtained from the csv-file created by GoogleTrends
+
+    Returns: pandas.DataFrame of the merge and re-scaled input pandas.DataFrame
+
+    """
     common_keyword = data_first.columns.intersection(data_second.columns)[0]
     scaling_factor = np.nanmedian(data_first[common_keyword] / data_second[common_keyword])
     data_second = data_second.apply(lambda x: x * scaling_factor)
     data = pd.merge(data_first, data_second.drop(common_keyword, axis=1), left_index=True, right_index=True)
+    return data
+
+
+def merge_keyword_chunks(data_list):
+    """
+    Merge a list of pandas.DataFrame objects with the same index and one overlapping column by appropriately
+    re-scaling.
+
+    Args:
+        data_list: list of pandas.DataFrame objects to be merged
+
+    Returns: pandas.DataFrame objects of the merged data sets contained in the input list
+
+    """
+    # Iteratively merge the DataFrame objects in the list of data
+    data = reduce((lambda x, y: merge_two_keyword_chunks(x, y)), data_list)
+    # Find the maximal value across keywords and time
+    max_value = data.max().max()
+    # Rescale the trends by the maximal value, i.e. such that the largest value across keywords and time is 100
+    data = 100 * data / max_value
     return data
 
 
@@ -83,12 +115,14 @@ def adjust_date_format(date, format_in, format_out):
 
 def get_chunks(list_object, chunk_size):
     """
-    Generator that divides a list into chunks
+    Generator that divides a list into chunks. If the list is divided in two or more chunks, two consecutive chunks
+    have one common element.
+
     Args:
         list_object: iterable
         chunk_size: size of each chunk as an integer
 
-    Returns: iterable in chunks
+    Returns: iterable list in chunks with one overlapping element
 
     """
     size = len(list_object)
@@ -139,7 +173,7 @@ class GoogleTrendsScraper:
         # Format of dates used by google
         self._google_date_format = '%Y-%m-%d'
         # Number of overlapping observations:
-        self.n_overlap = n_overlap
+        self.n_overlap = max(1, n_overlap)
         # Lunch the browser
         self.start_browser()
 
@@ -205,10 +239,10 @@ class GoogleTrendsScraper:
             data_time_list = []
             for url in self.create_urls(keywords_i, start_datetime, end_datetime, region):
                 data_time_list.append(self.get_data(url))
-            # Merge the so obtained set of DataFrames to a single DataFrame
-            data_keywords_list.append(merge_data(data_time_list, keywords_i))
-
-        data = reduce((lambda x, y: merge_two_keyword_chunks(x, y)), data_keywords_list)
+            # Concatenate the so obtained set of DataFrames to a single DataFrame
+            data_keywords_list.append(concat_data(data_time_list, keywords_i))
+        # Merge the multiple keyword chunks
+        data = merge_keyword_chunks(data_keywords_list)
         return data
 
     def create_urls(self, keywords, start, end, region=None):
@@ -233,7 +267,7 @@ class GoogleTrendsScraper:
 
         for x in range(int(num_subperiods)):
             start_sub = start + timedelta(days=x * length_subperiods)
-            end_sub = start + timedelta(days=(x + 1) * length_subperiods + 4)
+            end_sub = start + timedelta(days=(x + 1) * length_subperiods + self.n_overlap - 1)
             # It might be that the end of the sub-period exceeds the actual end of the trend period. In that case, we
             # let this period end at the date defined by 'end'
             if end_sub > end:

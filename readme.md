@@ -37,8 +37,8 @@ download-button is pressed and a csv-file containing the trends is downloaded. T
 loaded into Python as a `pandas.DataFrame` object. 
 GoogleTrends limits the range of consecutive daily observations displayed. For this reason, the 
 scraper divides the total time range is sub-periods and downloads the data separately for each of
-them. In order to combine the data to a single time series, each sub-period has one overlapping day 
-with the subsequent sub-period. Two sub-periods are then combined by multiplying the observations 
-of the second time period by a factor defined as the ratio between the last observation of the first
-window and the first observation of the second time window, which are both representing the trend 
-of the same day. 
+them. In order to combine the data to a single time series, each sub-period has one or more overlapping day 
+with the subsequent sub-period (the number of overlapping days can be defined with the input `n_overlap`). 
+Two sub-periods are then combined by multiplying the observations 
+of the second time period by a factor defined as the median ratio between the last `n_overlap`-observations of 
+the first window and the first `n_overlap`-observations of the second time window. 
