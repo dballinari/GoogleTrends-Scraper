@@ -128,15 +128,16 @@ def get_chunks(list_object, chunk_size):
     size = len(list_object)
     if size <= chunk_size:
         yield list_object
-    chunks_nb = math.ceil(size / chunk_size)
-    iter_ints = range(0, chunks_nb)
-    for i in iter_ints:
-        j = i * chunk_size
-        if i + 1 < chunks_nb:
-            k = j + chunk_size
-            yield list_object[max(j - 1, 0):k]
-        else:
-            yield list_object[max(j - 1, 0):]
+    else:
+        chunks_nb = math.ceil(size / chunk_size)
+        iter_ints = range(0, chunks_nb)
+        for i in iter_ints:
+            j = i * chunk_size
+            if i + 1 < chunks_nb:
+                k = j + chunk_size
+                yield list_object[max(j - 1, 0):k]
+            else:
+                yield list_object[max(j - 1, 0):]
 
 
 class GoogleTrendsScraper:
