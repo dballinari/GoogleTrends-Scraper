@@ -35,10 +35,15 @@ del gts
 The scraper opens the GoogleTrends web-page and runs the search. In order to obtain the data, the 
 download-button is pressed and a csv-file containing the trends is downloaded. The data is then 
 loaded into Python as a `pandas.DataFrame` object. 
+
 GoogleTrends limits the range of consecutive daily observations displayed. For this reason, the 
 scraper divides the total time range is sub-periods and downloads the data separately for each of
-them. In order to combine the data to a single time series, each sub-period has one or more overlapping day 
-with the subsequent sub-period (the number of overlapping days can be defined with the input `n_overlap`). 
-Two sub-periods are then combined by multiplying the observations 
-of the second time period by a factor defined as the median ratio between the last `n_overlap`-observations of 
-the first window and the first `n_overlap`-observations of the second time window. 
+them. In order to combine the data to a single time series, we download the data for the entire sample
+which will be at a lower frequency (weekly or monthly) and use this information to re-scale the 
+daily trends collected in sub-periods. More precisely, for each sub-group, we aggregate the data to the
+lower frequency and build a ratio between the data for the entire sample and the sub-period data. The rescaling
+factor is then defined as the median of these ratios over the given sub-period.
+
+Note that, theoretically, over a single sub-period, the ratio should be constant. However, do to the fact that 
+the trends are always based on a random sample, this holds not true. That is why, we define the factor as the 
+median of the ratios.
