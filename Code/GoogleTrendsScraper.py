@@ -186,7 +186,11 @@ def ceil_start_month(date):
     Returns: datetime.datetime object
 
     """
-    return datetime(date.year, date.month+1, 1)
+    if date.month == 12:
+        date = datetime(date.year + 1, 1, 1)
+    else:
+        date = datetime(date.year, date.month + 1, 1)
+    return date
 
 
 def floor_end_month(date):
