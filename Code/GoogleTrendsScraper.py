@@ -58,6 +58,9 @@ def concat_data(data_list, data_all, keywords, frequency):
     Returns: pandas DataFrame with a 'Date' column and a column for each keyword in 'keywords'
 
     """
+    # Remove trend subperiods for which no data has been found
+    data_list = [data for data in data_list if data.shape[0] != 0]
+    # Rescale the daily trends based on the data at the lower frequency
     data_list = [scale_trend(x, data_all, frequency) for x in data_list]
     # Combine the single trends that were scraped:
     data = reduce((lambda x, y: x.combine_first(y)), data_list)
@@ -326,7 +329,7 @@ class GoogleTrendsScraper:
         # Merge the multiple keyword chunks
         data = merge_keyword_chunks(data_keywords_list)
         # Cut data to return only the desired period:
-        data = data.loc[pd.date_range(start_datetime, end_datetime, freq='D')]
+        data = data.loc[data.index.isin(pd.date_range(start_datetime, end_datetime, freq='D'))]
         return data
 
     def create_urls_subperiods(self, keywords, start, end, region=None):
