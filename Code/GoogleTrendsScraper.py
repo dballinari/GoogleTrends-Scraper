@@ -212,7 +212,7 @@ def floor_end_month(date):
 
 
 class GoogleTrendsScraper:
-    def __init__(self, sleep=1, path_driver=None, headless=True, date_format='%Y-%m-%d', n_overlap=5):
+    def __init__(self, sleep=1, path_driver=None, headless=True, date_format='%Y-%m-%d'):
         """
         Constructor of the Google-Scraper-Class
         Args:
@@ -244,8 +244,6 @@ class GoogleTrendsScraper:
         self.date_format = date_format
         # Format of dates used by google
         self._google_date_format = '%Y-%m-%d'
-        # Number of overlapping observations:
-        self.n_overlap = max(1, n_overlap)
         # Lunch the browser
         self.start_browser()
 
