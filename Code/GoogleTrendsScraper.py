@@ -5,6 +5,7 @@ import math
 from selenium import webdriver
 from selenium.common import exceptions
 import os
+import shutil
 from datetime import datetime, timedelta
 from functools import reduce
 
@@ -34,8 +35,13 @@ def scale_trend(data_daily, data_all, frequency):
                                      floor_end_month(data_daily.index[-1]), freq='D')
         data_daily_monthly = data_daily.loc[factor_dates].resample('M', label="left", loffset=timedelta(1)).sum()
         factor = data_all.loc[data_daily_monthly.index] / data_daily_monthly
-
-    return data_daily*np.nanmedian(factor)
+    # Transform the factor from a pandas.DataFrame to a flat numpy.array
+    factor = np.array(factor).flatten()
+    # Remove all factor entries for which either of the series is zero
+    factor = factor[factor != 0]
+    factor = factor[np.isfinite(factor)]
+    # Rescale and return the daily trends
+    return data_daily*np.median(factor)
 
 
 def concat_data(data_list, data_all, keywords, frequency):
@@ -420,7 +426,11 @@ class GoogleTrendsScraper:
         # Sleep again
         time.sleep(self.sleep)
         # Delete the file
-        os.remove(self.filename.replace('/', '\\'))
+        while os.path.exists(self.filename.replace('/', '\\')):
+            try:
+                os.remove(self.filename.replace('/', '\\'))
+            except:
+                pass
         return data, frequency
 
     def go_to_url(self, url):
@@ -440,5 +450,5 @@ class GoogleTrendsScraper:
         When deleting an instance of this class, delete the temporary file folder and close the browser
 
         """
-        os.rmdir('tmp')
+        shutil.rmtree('tmp')
         self.quit_browser()

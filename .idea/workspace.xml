@@ -32,7 +32,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Projects/Project Sentiment Race/Classifiers" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
   </component>
   <component name="RunManager" selected="Python.example_script">
@@ -157,6 +157,7 @@
       <workItem from="1587396219555" duration="2747000" />
       <workItem from="1587401173645" duration="18718000" />
       <workItem from="1587477582612" duration="24000" />
+      <workItem from="1587664684265" duration="136000" />
     </task>
     <servers />
   </component>
