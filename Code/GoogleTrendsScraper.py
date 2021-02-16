@@ -33,7 +33,8 @@ def scale_trend(data_daily, data_all, frequency):
     elif frequency == "Monthly":
         factor_dates = pd.date_range(ceil_start_month(data_daily.index[0]),
                                      floor_end_month(data_daily.index[-1]), freq='D')
-        data_daily_monthly = data_daily.loc[factor_dates].resample('M', label="left", loffset=timedelta(1)).sum()
+        data_daily_monthly = data_daily.loc[factor_dates].resample(
+            'M', label="left", loffset=timedelta(1)).sum()
         factor = data_all.loc[data_daily_monthly.index] / data_daily_monthly
     # Transform the factor from a pandas.DataFrame to a flat numpy.array
     factor = np.array(factor).flatten()
@@ -41,7 +42,7 @@ def scale_trend(data_daily, data_all, frequency):
     factor = factor[factor != 0]
     factor = factor[np.isfinite(factor)]
     # Rescale and return the daily trends
-    return data_daily*np.median(factor)
+    return data_daily * np.median(factor)
 
 
 def concat_data(data_list, data_all, keywords, frequency):
@@ -87,9 +88,11 @@ def merge_two_keyword_chunks(data_first, data_second):
 
     """
     common_keyword = data_first.columns.intersection(data_second.columns)[0]
-    scaling_factor = np.nanmedian(data_first[common_keyword] / data_second[common_keyword])
+    scaling_factor = np.nanmedian(
+        data_first[common_keyword] / data_second[common_keyword])
     data_second = data_second.apply(lambda x: x * scaling_factor)
-    data = pd.merge(data_first, data_second.drop(common_keyword, axis=1), left_index=True, right_index=True)
+    data = pd.merge(data_first, data_second.drop(
+        common_keyword, axis=1), left_index=True, right_index=True)
     return data
 
 
@@ -269,12 +272,14 @@ class GoogleTrendsScraper:
         if self.path_driver is None:
             self.path_driver = 'chromedriver'
         # Start the browser
-        self.browser = webdriver.Chrome(executable_path=self.path_driver, chrome_options=chrome_options)
+        self.browser = webdriver.Chrome(
+            executable_path=self.path_driver, chrome_options=chrome_options)
         # Define the download behaviour of chrome
         # noinspection PyProtectedMember
-        self.browser.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+        self.browser.command_executor._commands["send_command"] = (
+            "POST", '/session/$sessionId/chromium/send_command')
         self.browser.execute("send_command", {'cmd': 'Page.setDownloadBehavior', 'params':
-            {'behavior': 'allow', 'downloadPath': self.dir + r'\tmp'}})
+                                              {'behavior': 'allow', 'downloadPath': self.dir + r'\tmp'}})
 
     def quit_browser(self):
         """
@@ -285,7 +290,7 @@ class GoogleTrendsScraper:
             self.browser.quit()
             self.browser = None
 
-    def get_trends(self, keywords, start, end, region=None):
+    def get_trends(self, keywords, start, end, region=None, category=None):
         """
         Function that starts the scraping procedure and returns the Google Trend data.
         Args:
@@ -293,6 +298,7 @@ class GoogleTrendsScraper:
             region: string indicating the region for which the trends are computed, default is None (Worldwide trends)
             start: start date as a string
             end: end date as a string
+            category: integer indicating the category (e.g. 7 is the category "Finance")
 
         Returns: pandas DataFrame with a 'Date' column and a column containing the trend for each keyword in 'keywords'
 
@@ -301,8 +307,10 @@ class GoogleTrendsScraper:
         if not isinstance(keywords, list):
             keywords = [keywords]
         # Convert the date strings to Google's format:
-        start = adjust_date_format(start, self.date_format, self._google_date_format)
-        end = adjust_date_format(end, self.date_format, self._google_date_format)
+        start = adjust_date_format(
+            start, self.date_format, self._google_date_format)
+        end = adjust_date_format(
+            end, self.date_format, self._google_date_format)
         # Create datetime objects from the date-strings:
         start_datetime = datetime.strptime(start, self._google_date_format)
         end_datetime = datetime.strptime(end, self._google_date_format)
@@ -310,8 +318,9 @@ class GoogleTrendsScraper:
         for keywords_i in get_chunks(keywords, 5):
             # Get the trends over the entire sample:
             url_all_i = self.create_url(keywords_i,
-                                        previous_weekday(start_datetime, 0), next_weekday(end_datetime, 6),
-                                        region)
+                                        previous_weekday(start_datetime, 0), next_weekday(
+                                            end_datetime, 6),
+                                        region, category)
             data_all_i, frequency_i = self.get_data(url_all_i)
             # If the data for the entire sample is already at the daily frequency we are done. Otherwise we need to
             # get the trends for sub-periods
@@ -320,19 +329,21 @@ class GoogleTrendsScraper:
             else:
                 # Iterate over the URLs of the sub-periods and retrieve the Google Trend data for each
                 data_time_list = []
-                for url in self.create_urls_subperiods(keywords_i, start_datetime, end_datetime, region):
+                for url in self.create_urls_subperiods(keywords_i, start_datetime, end_datetime, region, category):
                     data_time_list.append(self.get_data(url)[0])
                 # Concatenate the so obtained set of DataFrames to a single DataFrame
-                data_i = concat_data(data_time_list, data_all_i, keywords_i, frequency_i)
+                data_i = concat_data(
+                    data_time_list, data_all_i, keywords_i, frequency_i)
             # Add the data for the current list of keywords to a list
             data_keywords_list.append(data_i)
         # Merge the multiple keyword chunks
         data = merge_keyword_chunks(data_keywords_list)
         # Cut data to return only the desired period:
-        data = data.loc[data.index.isin(pd.date_range(start_datetime, end_datetime, freq='D'))]
+        data = data.loc[data.index.isin(pd.date_range(
+            start_datetime, end_datetime, freq='D'))]
         return data
 
-    def create_urls_subperiods(self, keywords, start, end, region=None):
+    def create_urls_subperiods(self, keywords, start, end, region=None, category=None):
         """
         Generator that creates an iterable of URLs that open the Google Trends for a series of sub periods
         Args:
@@ -340,22 +351,25 @@ class GoogleTrendsScraper:
             region: string indicating the region for which the trends are computed, default is None (Worldwide trends)
             start: start date as a string
             end: end date as a string
+            category: integer indicating the category (e.g. 7 is the category "Finance")
 
         Returns: iterable of URLs for Google Trends for sub periods of the entire period defined by 'start' and 'end'
 
         """
         # Calculate number of sub-periods and their respective length:
         num_subperiods = np.ceil(((end - start).days + 1) / self.max_days)
-        num_days_in_subperiod = np.ceil(((end - start).days + 1)/num_subperiods)
+        num_days_in_subperiod = np.ceil(
+            ((end - start).days + 1) / num_subperiods)
         for x in range(int(num_subperiods)):
             start_sub = start + timedelta(days=x * num_days_in_subperiod)
-            end_sub = start + timedelta(days=(x + 1) * num_days_in_subperiod - 1)
+            end_sub = start + \
+                timedelta(days=(x + 1) * num_days_in_subperiod - 1)
             if end_sub > end:
                 end_sub = end
             if start_sub < end:
-                yield self.create_url(keywords, start_sub, end_sub, region=region)
+                yield self.create_url(keywords, start_sub, end_sub, region=region, category=category)
 
-    def create_url(self, keywords, start, end, region=None):
+    def create_url(self, keywords, start, end, region=None, category=None):
         """
         Creates a URL for Google Trends
         Args:
@@ -363,6 +377,7 @@ class GoogleTrendsScraper:
             start: start date as a string
             end: end date as a string
             region: string indicating the region for which the trends are computed, default is None (Worldwide trends)
+            category: integer indicating the category (e.g. 7 is the category "Finance")
 
         Returns: string of the URL for Google Trends of the given keywords over the time period from 'start' to 'end'
 
@@ -371,13 +386,14 @@ class GoogleTrendsScraper:
         base = "https://trends.google.com/trends/explore"
         geo = f"geo={region}&" if region is not None else ""
         query = f"q={','.join(keywords)}"
+        cat = f"cat={category}&" if category is not None else ""
         # Format the datetime objects to strings in the format used by google
         start_string = datetime.strftime(start, self._google_date_format)
         end_string = datetime.strftime(end, self._google_date_format)
         # Define the date-range component for the URL
         date = f"date={start_string}%20{end_string}"
         # Construct the URL
-        url = f"{base}?{date}&{geo}{query}"
+        url = f"{base}?{cat}{date}&{geo}{query}"
         return url
 
     def get_data(self, url):
@@ -401,8 +417,10 @@ class GoogleTrendsScraper:
                 # reduce the likelihood that Google detects us as a scraper
                 time.sleep(self.sleep + 2 * np.random.rand(1))
                 # Try to find the button and click it
-                line_chart = self.browser.find_element_by_css_selector("widget[type='fe_line_chart']")
-                button = line_chart.find_element_by_css_selector('.widget-actions-item.export')
+                line_chart = self.browser.find_element_by_css_selector(
+                    "widget[type='fe_line_chart']")
+                button = line_chart.find_element_by_css_selector(
+                    '.widget-actions-item.export')
                 button.click()
             except exceptions.NoSuchElementException:
                 # If the button cannot be found, try again (load page, ...)
