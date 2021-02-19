@@ -231,6 +231,11 @@ class GoogleTrendsScraper:
         """
         # Current directory
         self.dir = os.getcwd()
+        # Define download folder for browser:
+        if os.name == 'nt':
+            self.download_path = self.dir + r'\tmp'
+        else:
+            self.download_path = self.dir + '/tmp'
         # Create a temporary folder in case it does not exist yet
         if not os.path.isdir('tmp'):
             os.mkdir('tmp')
@@ -267,6 +272,8 @@ class GoogleTrendsScraper:
             pass
         # Options for the browser
         chrome_options = webdriver.ChromeOptions()
+        # Define browser language
+        chrome_options.add_experimental_option('prefs', {'intl.accept_languages': 'en,en_US'})
         # If the browser should be run in headless mode
         if self.headless:
             chrome_options.add_argument('--headless')
@@ -282,7 +289,7 @@ class GoogleTrendsScraper:
         self.browser.command_executor._commands["send_command"] = (
             "POST", '/session/$sessionId/chromium/send_command')
         self.browser.execute("send_command", {'cmd': 'Page.setDownloadBehavior', 'params':
-                                              {'behavior': 'allow', 'downloadPath': self.dir + r'\tmp'}})
+                                              {'behavior': 'allow', 'downloadPath': self.download_path}})
 
     def quit_browser(self):
         """
