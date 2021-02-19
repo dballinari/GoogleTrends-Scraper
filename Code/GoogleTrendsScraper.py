@@ -8,7 +8,7 @@ import os
 import shutil
 from datetime import datetime, timedelta
 from functools import reduce
-
+import re
 
 def scale_trend(data_daily, data_all, frequency):
     """
@@ -235,7 +235,10 @@ class GoogleTrendsScraper:
         if not os.path.isdir('tmp'):
             os.mkdir('tmp')
         # Define the path to the downloaded csv-files (this is where the trends are saved)
-        self.filename = 'tmp/multiTimeline.csv'
+        if os.name == 'nt':
+            self.filename = 'tmp\\multiTimeline.csv'
+        else:
+            self.filename = './tmp/multiTimeline.csv'
         # Whether the browser should be opened in headless mode
         self.headless = headless
         # Path to the driver of Google Chrome
@@ -382,6 +385,10 @@ class GoogleTrendsScraper:
         Returns: string of the URL for Google Trends of the given keywords over the time period from 'start' to 'end'
 
         """
+        # Replace the '+' symbol in a keyword with '%2B'
+        keywords = [re.sub(r'[+]', '%2B', kw) for kw in keywords]
+        # Replace white spaces in a keyword with '%20'
+        keywords = [re.sub(r'\s', '%20', kw) for kw in keywords]
         # Define main components of the URL
         base = "https://trends.google.com/trends/explore"
         geo = f"geo={region}&" if region is not None else ""
@@ -445,9 +452,9 @@ class GoogleTrendsScraper:
         # Sleep again
         time.sleep(self.sleep)
         # Delete the file
-        while os.path.exists(self.filename.replace('/', '\\')):
+        while os.path.exists(self.filename):
             try:
-                os.remove(self.filename.replace('/', '\\'))
+                os.remove(self.filename)
             except:
                 pass
         return data, frequency

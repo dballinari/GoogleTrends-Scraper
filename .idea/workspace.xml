@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f998ceb2-088c-4ed5-b140-9f8126647b65" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Code/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/GoogleTrends Scraper.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GoogleTrends Scraper.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/GoogleTrendsScraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/GoogleTrendsScraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_script.py" beforeDir="false" afterPath="$PROJECT_DIR$/example_script.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +37,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager" selected="Python.example_script">
     <configuration name="GoogleTrend_Scraper" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -161,6 +166,9 @@
       <workItem from="1587669896693" duration="80000" />
       <workItem from="1590475402970" duration="186000" />
       <workItem from="1593864366394" duration="323000" />
+      <workItem from="1613494244868" duration="1142000" />
+      <workItem from="1613643712561" duration="32000" />
+      <workItem from="1613762795670" duration="2080000" />
     </task>
     <servers />
   </component>
@@ -168,61 +176,69 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="2005" height="145" key="GridCell.Tab.0.bottom" timestamp="1593864988279">
-      <screen x="0" y="0" width="2048" height="1112" />
+    <state x="837" y="331" key="FileChooserDialogImpl" timestamp="1613643741978">
+      <screen x="64" y="0" width="1984" height="1152" />
     </state>
-    <state width="2005" height="145" key="GridCell.Tab.0.bottom/0.0.2048.1112@0.0.2048.1112" timestamp="1593864988279" />
-    <state width="1637" height="128" key="GridCell.Tab.0.bottom/1680.0.2048.1120/0.0.1680.1010@0.0.1680.1010" timestamp="1590475589333" />
-    <state width="1877" height="321" key="GridCell.Tab.0.bottom/1920.-358.2048.1120/0.0.1920.1040@0.0.1920.1040" timestamp="1587476395883" />
-    <state width="2005" height="145" key="GridCell.Tab.0.center" timestamp="1593864988279">
-      <screen x="0" y="0" width="2048" height="1112" />
+    <state x="836" y="331" key="FileChooserDialogImpl/63.0.1985.1152@63.0.1985.1152" timestamp="1613546187799" />
+    <state x="837" y="331" key="FileChooserDialogImpl/64.0.1984.1152@64.0.1984.1152" timestamp="1613643741978" />
+    <state width="1941" height="386" key="GridCell.Tab.0.bottom" timestamp="1613764762543">
+      <screen x="64" y="0" width="1984" height="1152" />
     </state>
-    <state width="2005" height="145" key="GridCell.Tab.0.center/0.0.2048.1112@0.0.2048.1112" timestamp="1593864988279" />
-    <state width="1637" height="128" key="GridCell.Tab.0.center/1680.0.2048.1120/0.0.1680.1010@0.0.1680.1010" timestamp="1590475589333" />
-    <state width="1877" height="321" key="GridCell.Tab.0.center/1920.-358.2048.1120/0.0.1920.1040@0.0.1920.1040" timestamp="1587476395883" />
-    <state width="2005" height="145" key="GridCell.Tab.0.left" timestamp="1593864988279">
-      <screen x="0" y="0" width="2048" height="1112" />
+    <state width="1942" height="386" key="GridCell.Tab.0.bottom/63.0.1985.1152@63.0.1985.1152" timestamp="1613546579303" />
+    <state width="1941" height="386" key="GridCell.Tab.0.bottom/64.0.1984.1152@64.0.1984.1152" timestamp="1613764762543" />
+    <state width="1941" height="386" key="GridCell.Tab.0.center" timestamp="1613764762543">
+      <screen x="64" y="0" width="1984" height="1152" />
     </state>
-    <state width="2005" height="145" key="GridCell.Tab.0.left/0.0.2048.1112@0.0.2048.1112" timestamp="1593864988279" />
-    <state width="1637" height="128" key="GridCell.Tab.0.left/1680.0.2048.1120/0.0.1680.1010@0.0.1680.1010" timestamp="1590475589333" />
-    <state width="1877" height="321" key="GridCell.Tab.0.left/1920.-358.2048.1120/0.0.1920.1040@0.0.1920.1040" timestamp="1587476395883" />
-    <state width="2005" height="145" key="GridCell.Tab.0.right" timestamp="1593864988279">
-      <screen x="0" y="0" width="2048" height="1112" />
+    <state width="1942" height="386" key="GridCell.Tab.0.center/63.0.1985.1152@63.0.1985.1152" timestamp="1613546579302" />
+    <state width="1941" height="386" key="GridCell.Tab.0.center/64.0.1984.1152@64.0.1984.1152" timestamp="1613764762543" />
+    <state width="1941" height="386" key="GridCell.Tab.0.left" timestamp="1613764762543">
+      <screen x="64" y="0" width="1984" height="1152" />
     </state>
-    <state width="2005" height="145" key="GridCell.Tab.0.right/0.0.2048.1112@0.0.2048.1112" timestamp="1593864988279" />
-    <state width="1637" height="128" key="GridCell.Tab.0.right/1680.0.2048.1120/0.0.1680.1010@0.0.1680.1010" timestamp="1590475589333" />
-    <state width="1877" height="321" key="GridCell.Tab.0.right/1920.-358.2048.1120/0.0.1920.1040@0.0.1920.1040" timestamp="1587476395883" />
-    <state width="1877" height="321" key="GridCell.Tab.1.bottom" timestamp="1587476395883">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1942" height="386" key="GridCell.Tab.0.left/63.0.1985.1152@63.0.1985.1152" timestamp="1613546579302" />
+    <state width="1941" height="386" key="GridCell.Tab.0.left/64.0.1984.1152@64.0.1984.1152" timestamp="1613764762543" />
+    <state width="1941" height="386" key="GridCell.Tab.0.right" timestamp="1613764762543">
+      <screen x="64" y="0" width="1984" height="1152" />
     </state>
-    <state width="2005" height="266" key="GridCell.Tab.1.bottom/0.0.2048.1112@0.0.2048.1112" timestamp="1587387524050" />
-    <state width="1877" height="321" key="GridCell.Tab.1.bottom/1920.-358.2048.1120/0.0.1920.1040@0.0.1920.1040" timestamp="1587476395883" />
-    <state width="1877" height="321" key="GridCell.Tab.1.center" timestamp="1587476395883">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1942" height="386" key="GridCell.Tab.0.right/63.0.1985.1152@63.0.1985.1152" timestamp="1613546579302" />
+    <state width="1941" height="386" key="GridCell.Tab.0.right/64.0.1984.1152@64.0.1984.1152" timestamp="1613764762543" />
+    <state width="1941" height="386" key="GridCell.Tab.1.bottom" timestamp="1613764794033">
+      <screen x="64" y="0" width="1984" height="1152" />
     </state>
-    <state width="2005" height="266" key="GridCell.Tab.1.center/0.0.2048.1112@0.0.2048.1112" timestamp="1587387524050" />
-    <state width="1877" height="321" key="GridCell.Tab.1.center/1920.-358.2048.1120/0.0.1920.1040@0.0.1920.1040" timestamp="1587476395883" />
-    <state width="1877" height="321" key="GridCell.Tab.1.left" timestamp="1587476395883">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1942" height="386" key="GridCell.Tab.1.bottom/63.0.1985.1152@63.0.1985.1152" timestamp="1613546579303" />
+    <state width="1941" height="386" key="GridCell.Tab.1.bottom/64.0.1984.1152@64.0.1984.1152" timestamp="1613764794033" />
+    <state width="1941" height="386" key="GridCell.Tab.1.center" timestamp="1613764794033">
+      <screen x="64" y="0" width="1984" height="1152" />
     </state>
-    <state width="2005" height="266" key="GridCell.Tab.1.left/0.0.2048.1112@0.0.2048.1112" timestamp="1587387524050" />
-    <state width="1877" height="321" key="GridCell.Tab.1.left/1920.-358.2048.1120/0.0.1920.1040@0.0.1920.1040" timestamp="1587476395883" />
-    <state width="1877" height="321" key="GridCell.Tab.1.right" timestamp="1587476395883">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1942" height="386" key="GridCell.Tab.1.center/63.0.1985.1152@63.0.1985.1152" timestamp="1613546579303" />
+    <state width="1941" height="386" key="GridCell.Tab.1.center/64.0.1984.1152@64.0.1984.1152" timestamp="1613764794033" />
+    <state width="1941" height="386" key="GridCell.Tab.1.left" timestamp="1613764794033">
+      <screen x="64" y="0" width="1984" height="1152" />
     </state>
-    <state width="2005" height="266" key="GridCell.Tab.1.right/0.0.2048.1112@0.0.2048.1112" timestamp="1587387524050" />
-    <state width="1877" height="321" key="GridCell.Tab.1.right/1920.-358.2048.1120/0.0.1920.1040@0.0.1920.1040" timestamp="1587476395883" />
-    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1587474637252">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1942" height="386" key="GridCell.Tab.1.left/63.0.1985.1152@63.0.1985.1152" timestamp="1613546579303" />
+    <state width="1941" height="386" key="GridCell.Tab.1.left/64.0.1984.1152@64.0.1984.1152" timestamp="1613764794033" />
+    <state width="1941" height="386" key="GridCell.Tab.1.right" timestamp="1613764794033">
+      <screen x="64" y="0" width="1984" height="1152" />
     </state>
-    <state width="968" height="528" key="XDebugger.FullValuePopup/1920.-358.2048.1120/0.0.1920.1040@0.0.1920.1040" timestamp="1587474637252" />
-    <state x="623" y="225" key="search.everywhere.popup" timestamp="1587474732797">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1942" height="386" key="GridCell.Tab.1.right/63.0.1985.1152@63.0.1985.1152" timestamp="1613546579303" />
+    <state width="1941" height="386" key="GridCell.Tab.1.right/64.0.1984.1152@64.0.1984.1152" timestamp="1613764794033" />
+    <state x="565" y="219" key="SettingsEditor" timestamp="1613546156724">
+      <screen x="63" y="0" width="1985" height="1152" />
     </state>
-    <state x="623" y="225" key="search.everywhere.popup/1920.-358.2048.1120/0.0.1920.1040@0.0.1920.1040" timestamp="1587474732797" />
+    <state x="565" y="219" key="SettingsEditor/63.0.1985.1152@63.0.1985.1152" timestamp="1613546156724" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/example_script.py</url>
+          <line>6</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/GoogleTrends_Scraper$example_script.coverage" NAME="example_script Coverage Results" MODIFIED="1593864479695" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/GoogleTrends_Scraper$example_script.coverage" NAME="example_script Coverage Results" MODIFIED="1613764762419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GoogleTrends_Scraper$scraping_webpage.coverage" NAME="scraping_webpage Coverage Results" MODIFIED="1585057914504" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GoogleTrends_Scraper$script_scrape.coverage" NAME="script_scrape Coverage Results" MODIFIED="1582619071765" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
