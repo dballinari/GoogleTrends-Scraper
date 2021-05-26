@@ -10,7 +10,7 @@ The scraper is constructed using Python 3.7 and is based on `selenium` and `pand
 modules can be installed by navigating to the root of this project and running 
 `pip install -r requirements.txt`.
 
-Moreover, Selenium needs a browser-driver, e.g. [Google Chrome dirver](https://sites.google.com/a/chromium.org/chromedriver/downloads).
+Moreover, Selenium needs a browser-driver, e.g. [Google Chrome driver](https://sites.google.com/a/chromium.org/chromedriver/downloads).
 The path to the driver's location has to be added to the system path variables or 
 indicated when initializing the `GoogleTrendsScraper` object (see below) 
 
