@@ -22,7 +22,7 @@ keyword, time range and region can be obtained by running the `GoogleTrendsScrpa
 method. 
 
 ```python
-from Code.GoogleTrendsScraper import GoogleTrendsScraper
+from src.GoogleTrendsScraper import GoogleTrendsScraper
 
 gts = GoogleTrendsScraper(sleep=2, path_driver='path/to/driver.exe', headless=True)
 data = gts.get_trends('foo', '2018-01-01', '2019-03-31', 'US')
