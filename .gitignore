@@ -133,3 +133,7 @@ dmypy.json
 
 # pytype static type analyzer
 .pytype/
+
+# PyCharm
+.idea
+__pycache__
