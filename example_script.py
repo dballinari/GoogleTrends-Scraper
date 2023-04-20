@@ -1,4 +1,4 @@
-from Code.GoogleTrendsScraper import GoogleTrendsScraper
+from src.GoogleTrendsScraper import GoogleTrendsScraper
 
 gts = GoogleTrendsScraper(
     sleep=2, path_driver='C:/Users/danie/chromedriver/chromedriver.exe', headless=False)
