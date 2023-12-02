@@ -4,11 +4,16 @@ import numpy as np
 import math
 from selenium import webdriver
 from selenium.common import exceptions
+from selenium.webdriver.common.by import By
 import os
 import shutil
 from datetime import datetime, timedelta
 from functools import reduce
 import re
+import tempfile
+
+NAME_DOWNLOAD_FILE = 'multiTimeline.csv'
+
 
 def scale_trend(data_daily, data_all, frequency):
     """
@@ -232,18 +237,9 @@ class GoogleTrendsScraper:
         # Current directory
         self.dir = os.getcwd()
         # Define download folder for browser:
-        if os.name == 'nt':
-            self.download_path = self.dir + r'\tmp'
-        else:
-            self.download_path = self.dir + '/tmp'
-        # Create a temporary folder in case it does not exist yet
-        if not os.path.isdir('tmp'):
-            os.mkdir('tmp')
+        self.download_path = tempfile.TemporaryDirectory()
         # Define the path to the downloaded csv-files (this is where the trends are saved)
-        if os.name == 'nt':
-            self.filename = 'tmp\\multiTimeline.csv'
-        else:
-            self.filename = './tmp/multiTimeline.csv'
+        self.filename = os.path.join(self.download_path.name, NAME_DOWNLOAD_FILE)
         # Whether the browser should be opened in headless mode
         self.headless = headless
         # Path to the driver of Google Chrome
@@ -289,7 +285,7 @@ class GoogleTrendsScraper:
         self.browser.command_executor._commands["send_command"] = (
             "POST", '/session/$sessionId/chromium/send_command')
         self.browser.execute("send_command", {'cmd': 'Page.setDownloadBehavior', 'params':
-                                              {'behavior': 'allow', 'downloadPath': self.download_path}})
+                                              {'behavior': 'allow', 'downloadPath': self.download_path.name}})
 
     def quit_browser(self):
         """
@@ -429,11 +425,11 @@ class GoogleTrendsScraper:
                 self.go_to_url(url)
                 # Sleep the code by the defined time plus a random number of seconds between 0s and 2s. This should
                 # reduce the likelihood that Google detects us as a scraper
-                time.sleep(self.sleep + 2 * np.random.rand(1))
+                time.sleep(self.sleep + 2 * np.random.rand())
                 # Try to find the button and click it
-                line_chart = self.browser.find_element_by_css_selector(
+                line_chart = self.browser.find_element(By.CSS_SELECTOR,
                     "widget[type='fe_line_chart']")
-                button = line_chart.find_element_by_css_selector(
+                button = line_chart.find_element(By.CSS_SELECTOR,
                     '.widget-actions-item.export')
                 button.click()
             except exceptions.NoSuchElementException:
@@ -483,5 +479,5 @@ class GoogleTrendsScraper:
         When deleting an instance of this class, delete the temporary file folder and close the browser
 
         """
-        shutil.rmtree('tmp')
+        self.download_path.cleanup()
         self.quit_browser()

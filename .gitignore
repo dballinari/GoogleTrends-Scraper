@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
@@ -137,3 +138,4 @@ dmypy.json
 # PyCharm
 .idea
 __pycache__
+src/__pycache__/*.pyc
