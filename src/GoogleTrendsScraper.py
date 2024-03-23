@@ -6,18 +6,23 @@ from selenium import webdriver
 from selenium.common import exceptions
 from selenium.webdriver.common.by import By
 import os
-import shutil
 from datetime import datetime, timedelta
 from functools import reduce
 import re
 import tempfile
 
+
+# Name of the download file created by Google Trends
 NAME_DOWNLOAD_FILE = 'multiTimeline.csv'
+# Max number of consecutive daily observations scraped in one go
+MAX_NUMBER_DAILY_OBS = 200
+# Max number of simultaneous keywords scraped
+MAX_KEYWORDS = 5
 
 
 def scale_trend(data_daily, data_all, frequency):
     """
-    Function that rescales the d
+    Function that rescales the data at daily frequency using data at lower frequency
     Args:
         data_daily: pandas.DataFrame of daily trend data
         data_all: pandas.DataFrame of the trend data over the entire sample at a lower frequency
@@ -249,7 +254,7 @@ class GoogleTrendsScraper:
         # Sleep time used during the scraping procedure
         self.sleep = sleep
         # Maximal number of consecutive days scraped
-        self.max_days = 200
+        self.max_days = MAX_NUMBER_DAILY_OBS
         # Format of the date-strings
         self.date_format = date_format
         # Format of dates used by google
@@ -321,7 +326,7 @@ class GoogleTrendsScraper:
         start_datetime = datetime.strptime(start, self._google_date_format)
         end_datetime = datetime.strptime(end, self._google_date_format)
         data_keywords_list = []
-        for keywords_i in get_chunks(keywords, 5):
+        for keywords_i in get_chunks(keywords, MAX_KEYWORDS):
             # Get the trends over the entire sample:
             url_all_i = self.create_url(keywords_i,
                                         previous_weekday(start_datetime, 0), next_weekday(
@@ -425,7 +430,7 @@ class GoogleTrendsScraper:
                 self.go_to_url(url)
                 # Sleep the code by the defined time plus a random number of seconds between 0s and 2s. This should
                 # reduce the likelihood that Google detects us as a scraper
-                time.sleep(self.sleep + 2 * np.random.rand())
+                time.sleep(self.sleep*(1+np.random.rand()))
                 # Try to find the button and click it
                 line_chart = self.browser.find_element(By.CSS_SELECTOR,
                     "widget[type='fe_line_chart']")
@@ -436,7 +441,7 @@ class GoogleTrendsScraper:
                 # If the button cannot be found, try again (load page, ...)
                 pass
         # After downloading, wait again to allow the file to be downloaded
-        time.sleep(self.sleep)
+        time.sleep(self.sleep*(1+np.random.rand()))
         # Load the data from the csv-file as pandas.DataFrame object
         data = pd.read_csv(self.filename, skiprows=1)
         # Set date as index:
@@ -453,7 +458,7 @@ class GoogleTrendsScraper:
             data = data.set_index("Month")
             frequency = 'Monthly'
         # Sleep again
-        time.sleep(self.sleep)
+        time.sleep(self.sleep*(1+np.random.rand()))
         # Delete the file
         while os.path.exists(self.filename):
             try:
